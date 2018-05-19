@@ -3,3 +3,6 @@ Style/Documentation:
 
 Metrics/LineLength:
   Max: 100
+
+Naming/UncommunicativeMethodParamName:
+  Enabled: false

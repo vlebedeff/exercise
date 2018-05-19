@@ -14,6 +14,15 @@ RSpec.describe Exercise do
       expect(gcd(18, 35)).to eq(1)
       expect(gcd(28_851_538, 1_183_019)).to eq(17_657)
       expect(gcd(1, 2_000_000_000)).to eq(1)
+      expect(gcd(2_000_000_000, 1_999_999_998)).to eq(2)
+    end
+  end
+
+  describe '#lcm' do
+    it 'calculates least common multiple of two numbers' do
+      expect(lcm(6, 8)).to eq(24)
+      expect(lcm(28_851_538, 1_183_019)). to eq(1_933_053_046)
+      expect(lcm(2_000_000_000, 1_999_999_998)).to eq(1_999_999_998_000_000_000)
     end
   end
 end

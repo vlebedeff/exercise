@@ -4,9 +4,7 @@ module Exercise
   end
 
   def fib_mod_10(position)
-    return 0 if position.zero?
-    return 1 if position == 1
-    (1..position).reduce([0, 1]) { |(prev, current), _| [current, (prev + current) % 10] }.first
+    fib_mod_m_naive(position, 10)
   end
 
   def gcd(a, b)
@@ -18,5 +16,24 @@ module Exercise
 
   def lcm(a, b)
     a * b / gcd(a, b)
+  end
+
+  def pisano_period(m)
+    a = 1
+    b = 1
+    p = 1
+    # Pisano Period always starts from 0 1
+    a, b, p = [b, (a + b) % m, p + 1] while a != 0 || b != 1
+    p
+  end
+
+  def fib_mod_m(n, m)
+    fib_mod_m_naive(n % pisano_period(m), m)
+  end
+
+  def fib_mod_m_naive(n, m)
+    return 0 if n.zero?
+    return 1 if n == 1
+    (1..n).reduce([0, 1]) { |(prev, curr), _| [curr, (prev + curr) % m] }.first
   end
 end

@@ -40,4 +40,12 @@ RSpec.describe Exercise do # rubocop:disable Metrics/BlockLength
       expect(fib_mod_m(2_816_213_588, 239)).to eq(151)
     end
   end
+
+  describe '#fib_sum_mod_10' do
+    specify do
+      expect(fib_sum_mod_10(3)).to eq(4)
+      expect(fib_sum_mod_10(100)).to eq(5)
+      expect(fib_sum_mod_10(240)).to eq(0)
+    end
+  end
 end

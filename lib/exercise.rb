@@ -36,4 +36,12 @@ module Exercise
     return 1 if n == 1
     (1..n).reduce([0, 1]) { |(prev, curr), _| [curr, (prev + curr) % m] }.first
   end
+
+  def fib_sum_mod_10(n)
+    reduced_n = n % pisano_period(10)
+    return reduced_n if reduced_n < 2
+    (1...reduced_n)
+      .reduce([0, 1]) { |nums| nums + [(nums[-2] + nums[-1]) % 10] }
+      .inject(:+) % 10
+  end
 end

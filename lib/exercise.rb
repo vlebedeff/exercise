@@ -44,4 +44,14 @@ module Exercise
       .reduce([0, 1]) { |nums| nums + [(nums[-2] + nums[-1]) % 10] }
       .inject(:+) % 10
   end
+
+  def fib_sum_partial_mod_10(m, n)
+    pisano_period10 = pisano_period(10)
+    reduced_m = m % pisano_period10
+    reduced_n = n % pisano_period10
+    return reduced_n if reduced_n < 2
+    (1...reduced_n)
+      .reduce([0, 1]) { |nums| nums + [(nums[-2] + nums[-1]) % 10] }[reduced_m..-1]
+      .inject(:+) % 10
+  end
 end

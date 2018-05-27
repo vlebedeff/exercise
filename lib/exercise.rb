@@ -54,4 +54,10 @@ module Exercise
       .reduce([0, 1]) { |nums| nums + [(nums[-2] + nums[-1]) % 10] }[reduced_m..-1]
       .inject(:+) % 10
   end
+
+  def fib_sum_squared_mod_10(n)
+    a = fib_mod_m(n, 10)
+    b = fib_mod_m(n + 1, 10)
+    (a * b) % 10
+  end
 end

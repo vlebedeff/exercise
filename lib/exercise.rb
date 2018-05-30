@@ -1,3 +1,5 @@
+require 'exercise/money_change'
+
 module Exercise
   def max_pairwise_product(numbers)
     numbers.sort.last(2).reduce(:*)

@@ -1,4 +1,5 @@
 require 'exercise/money_change'
+require 'exercise/fractional_knapsack'
 
 module Exercise
   def max_pairwise_product(numbers)

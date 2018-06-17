@@ -1,5 +1,6 @@
 require 'exercise/money_change'
 require 'exercise/fractional_knapsack'
+require 'exercise/min_segment_coverage'
 
 module Exercise
   def max_pairwise_product(numbers)

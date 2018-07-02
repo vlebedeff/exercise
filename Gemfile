@@ -4,8 +4,11 @@ source 'https://rubygems.org'
 
 # git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
-gem 'pry'
-gem 'pry-byebug'
-gem 'pry-doc'
-gem 'rspec'
-gem 'rubocop'
+gem 'rake'
+group :development, :test do
+  gem 'pry'
+  gem 'pry-byebug'
+  gem 'pry-doc'
+  gem 'rspec'
+  gem 'rubocop'
+end

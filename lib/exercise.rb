@@ -3,6 +3,7 @@ require 'exercise/fractional_knapsack'
 require 'exercise/min_segment_coverage'
 require 'exercise/distinct_summands'
 require 'exercise/max_salary'
+require 'exercise/binary_search'
 
 module Exercise
   def max_pairwise_product(numbers)

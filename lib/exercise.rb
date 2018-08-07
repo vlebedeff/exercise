@@ -4,6 +4,7 @@ require 'exercise/min_segment_coverage'
 require 'exercise/distinct_summands'
 require 'exercise/max_salary'
 require 'exercise/binary_search'
+require 'exercise/majority_element'
 
 module Exercise
   def max_pairwise_product(numbers)

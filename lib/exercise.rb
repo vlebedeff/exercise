@@ -8,6 +8,7 @@ require 'exercise/binary_search'
 require 'exercise/majority_element'
 require 'exercise/quick_sort'
 require 'exercise/merge_sort'
+require 'exercise/closest_point_finder'
 
 module Exercise
   def max_pairwise_product(numbers)

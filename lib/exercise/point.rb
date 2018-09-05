@@ -2,7 +2,7 @@ module Exercise
   class Point
     attr_reader :x, :y
 
-    def initialize(x, y)
+    def initialize(x, y = x)
       @x = x
       @y = y
     end

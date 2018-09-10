@@ -10,6 +10,7 @@ require 'exercise/quick_sort'
 require 'exercise/merge_sort'
 require 'exercise/closest_point_finder'
 require 'exercise/range_search'
+require 'exercise/min_arithmetic_steps'
 
 module Exercise
   def max_pairwise_product(numbers)

@@ -12,6 +12,7 @@ require 'exercise/closest_point_finder'
 require 'exercise/range_search'
 require 'exercise/min_arithmetic_steps'
 require 'exercise/edit_distance'
+require 'exercise/lcs'
 
 module Exercise
   def max_pairwise_product(numbers)

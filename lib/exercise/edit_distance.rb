@@ -8,7 +8,7 @@ module Exercise
             table[i][j - 1] + 1,
             table[i - 1][j] + 1,
             table[i - 1][j - 1] + (s1[i - 1] == s2[j - 1] ? 0 : 1)
-        ].min
+          ].min
       end
     end
     table[s1.size][s2.size]

@@ -3,10 +3,10 @@ module Exercise
     include Exercise
 
     let(:examples) do
-      [ ['kitten', 'sitting', 3],
-        ['saturday', 'sunday', 3],
-        ['tuesday', 'thursday', 2],
-        ['hematology', 'hepatology', 1] ]
+      [['kitten', 'sitting', 3],
+       ['saturday', 'sunday', 3],
+       ['tuesday', 'thursday', 2],
+       ['hematology', 'hepatology', 1]]
     end
 
     specify do

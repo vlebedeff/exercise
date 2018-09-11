@@ -4,7 +4,7 @@ module Exercise
   # @param items [Array<Array(Integer, Integer)>]
   #   list of items represented with pairs of value and weight
   # @return value [Number] maximum value for the given capacity
-  def fractional_knapsack(capacity, items) # rubocop:disable Metrics/AbcSize
+  def fractional_knapsack(capacity, items)
     sorted_items = items.sort_by { |value, weight| weight.to_f / value }
     target_value = 0
     left_capacity = capacity

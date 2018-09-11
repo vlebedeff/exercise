@@ -18,7 +18,7 @@ module Exercise
 
     private
 
-    # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     def sort(points, axis = :x)
       return points if points.count < 2
       m = points.count / 2
@@ -50,7 +50,7 @@ module Exercise
       end
       c
     end
-    # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
     def merge(a, b, axis)
       c = []

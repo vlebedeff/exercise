@@ -1,5 +1,5 @@
 module Exercise
-  def range_search(points, ranges) # rubocop:disable Metrics/AbcSize
+  def range_search(points, ranges)
     return [] if points.empty?
     ps = (0..points.size - 1).map { |i| [i, :p] }
     ls = ranges.map { |r| [r.begin, :l] }

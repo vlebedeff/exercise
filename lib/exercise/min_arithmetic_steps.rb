@@ -1,5 +1,5 @@
 module Exercise
-  def min_arithmetic_steps(n, operations) # rubocop:disable Metrics/AbcSize
+  def min_arithmetic_steps(n, operations)
     from = [0, 1]
     steps = [0, 0]
     1.upto(n) do |i|

@@ -1,5 +1,5 @@
 module Exercise
-  def quick_sort(items) # rubocop:disable Metrics/AbcSize
+  def quick_sort(items)
     a = items.dup
     stack = [0, items.count - 1]
     while stack.any?
@@ -19,7 +19,7 @@ module Exercise
     a
   end
 
-  def quick_sort_partition(a, l, r) # rubocop:disable Metrics/AbcSize
+  def quick_sort_partition(a, l, r)
     k = l + rand(r - l)
     a[l], a[k] = a[k], a[l]
     pivot_l = pivot_r = l

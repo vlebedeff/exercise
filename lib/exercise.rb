@@ -14,6 +14,7 @@ require 'exercise/min_arithmetic_steps'
 require 'exercise/edit_distance'
 require 'exercise/lcs'
 require 'exercise/arithm_exp'
+require 'exercise/balanced_partition'
 
 module Exercise
   def max_pairwise_product(numbers)

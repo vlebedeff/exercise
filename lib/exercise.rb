@@ -16,6 +16,7 @@ require 'exercise/lcs'
 require 'exercise/arithm_exp'
 require 'exercise/balanced_partition'
 require 'exercise/mismatched_brackets'
+require 'exercise/tree'
 
 module Exercise
   def max_pairwise_product(numbers)

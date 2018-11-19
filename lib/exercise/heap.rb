@@ -10,8 +10,25 @@ module Exercise
       upheap
     end
 
+    def remove
+      raise 'Empty heap' unless @items.any?
+      element = @items.shift
+      @items.rotate!(-1)
+      downheap
+      element
+    end
+
     def values
       @items
+    end
+
+    def first
+      @items.first
+    end
+
+    def replace_first(value)
+      @items[0] = value
+      downheap
     end
 
     private

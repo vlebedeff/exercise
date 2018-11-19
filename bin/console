@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require 'pry'
+
+$LOAD_PATH << './lib'
+require 'exercise'
+
+Pry.start

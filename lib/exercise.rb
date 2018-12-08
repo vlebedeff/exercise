@@ -20,6 +20,7 @@ require 'exercise/tree'
 require 'exercise/packet_processor'
 require 'exercise/heap'
 require 'exercise/parallel_processor'
+require 'exercise/disjoint_set'
 
 module Exercise
   def max_pairwise_product(numbers)

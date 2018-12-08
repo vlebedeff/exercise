@@ -1,4 +1,4 @@
-RSpec.describe Exercise do # rubocop:disable Metrics/BlockLength
+RSpec.describe Exercise do
   include Exercise
 
   describe '#fib_mod_10' do

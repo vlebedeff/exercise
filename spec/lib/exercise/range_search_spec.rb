@@ -1,5 +1,5 @@
 module Exercise
-  RSpec.describe '#range_search' do # rubocop:disable Metrics/BlockLength
+  RSpec.describe '#range_search' do
     include Exercise
 
     specify do

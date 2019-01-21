@@ -8,7 +8,7 @@ module Exercise
     sorted_items = items.sort_by { |value, weight| weight.to_f / value }
     target_value = 0
     left_capacity = capacity
-    while left_capacity > 0 && sorted_items.any?
+    while left_capacity.positive? && sorted_items.any?
       value, weight = sorted_items.shift
       item_fraction = [1, Rational(left_capacity, weight)].min
       target_value += item_fraction * value

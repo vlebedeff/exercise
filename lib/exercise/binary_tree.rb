@@ -26,6 +26,17 @@ module Exercise
       end
     end
 
+    def each_pre_order
+      return to_enum(:each_pre_order) unless block_given?
+      return if data.empty?
+      stack = [0]
+      while stack.any?
+        current = stack.pop
+        yield value(current)
+        stack += [right(current), left(current)].compact
+      end
+    end
+
     private
 
     def value(i)

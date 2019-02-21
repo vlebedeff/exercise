@@ -34,5 +34,11 @@ module Exercise
 
       specify { expect(tree2.each_in_order.to_a).to eq([50, 70, 80, 30, 90, 40, 0, 20, 10, 60]) }
     end
+
+    describe '#each_pre_order' do
+      specify { expect(tree1.each_pre_order.to_a).to eq([4, 2, 1, 3, 5]) }
+
+      specify { expect(tree2.each_pre_order.to_a).to eq([0, 70, 50, 40, 30, 80, 90, 20, 60, 10]) }
+    end
   end
 end

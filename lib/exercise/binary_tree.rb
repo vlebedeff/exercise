@@ -37,6 +37,28 @@ module Exercise
       end
     end
 
+    def each_post_order # rubocop:disable Metrics/PerceivedComplexity
+      return to_enum(:each_post_order) unless block_given?
+      return if data.empty?
+      stack = []
+      current = 0
+      loop do
+        while current
+          stack += [right(current), current].compact
+          current = left(current)
+        end
+        current = stack.pop
+        current_right = right(current)
+        if current_right && current_right == stack.last
+          current, stack[-1] = stack[-1], current
+        else
+          yield value(current)
+          current = nil
+        end
+        break if stack.empty?
+      end
+    end
+
     private
 
     def value(i)

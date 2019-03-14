@@ -1,5 +1,6 @@
 AllCops:
   DefaultFormatter: fuubar
+  CacheRootDirectory: .rubocop/cache
 
 Style/Documentation:
   Enabled: false

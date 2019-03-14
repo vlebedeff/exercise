@@ -1,0 +1,2 @@
+docker build . -t exercise
+docker run --rm -it --name exercise -v "$(pwd):/var/exercise" exercise $@

@@ -46,5 +46,12 @@ module Exercise
 
       specify { expect(tree2.each_post_order.to_a).to eq([50, 80, 90, 30, 40, 70, 10, 60, 20, 0]) }
     end
+
+    describe '#search?' do
+      specify do
+        expect(tree1.searchable?).to eq(true)
+        expect(tree2.searchable?).not_to eq(true)
+      end
+    end
   end
 end

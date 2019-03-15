@@ -61,6 +61,15 @@ module Exercise
       end
     end
 
+    def searchable?
+      previous = -Float::INFINITY
+      each_in_order do |value|
+        return false unless value > previous
+        previous = value
+      end
+      true
+    end
+
     private
 
     def value(i)

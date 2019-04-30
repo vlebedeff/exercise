@@ -29,6 +29,32 @@ module Exercise
       )
     end
 
+    let(:full_binary_tree) do
+      BinaryTree.new(
+        [
+          [4, 1, 2],
+          [2, 3, 4],
+          [6, 5, 6],
+          [1],
+          [3],
+          [5],
+          [7]
+        ]
+      )
+    end
+
+    let(:unbalanced_tree) do
+      BinaryTree.new(
+        [
+          [1, nil, 1],
+          [2, nil, 2],
+          [3, nil, 3],
+          [4, nil, 4],
+          [5]
+        ]
+      )
+    end
+
     describe '#each_in_order' do
       specify { expect(tree1.each_in_order.to_a).to eq([1, 2, 3, 4, 5]) }
 
@@ -47,10 +73,42 @@ module Exercise
       specify { expect(tree2.each_post_order.to_a).to eq([50, 80, 90, 30, 40, 70, 10, 60, 20, 0]) }
     end
 
-    describe '#search?' do
+    describe '#searchable?' do
       specify do
         expect(tree1.searchable?).to eq(true)
         expect(tree2.searchable?).not_to eq(true)
+        expect(full_binary_tree.searchable?).to eq(true)
+        expect(unbalanced_tree.searchable?).to eq(true)
+      end
+
+      context 'when tree contains duplicates' do
+        let(:tree_with_duplicates_in_right) do
+          BinaryTree.new(
+            [
+              [2, 1, 2],
+              [1],
+              [2]
+            ]
+          )
+        end
+
+        let(:tree_with_duplicates_in_left) do
+          BinaryTree.new(
+            [
+              [2, 1, 2],
+              [2],
+              [3]
+            ]
+          )
+        end
+
+        specify do
+          expect(tree_with_duplicates_in_right.searchable?).to eq(true)
+        end
+
+        specify do
+          expect(tree_with_duplicates_in_left.searchable?).to eq(false)
+        end
       end
     end
   end

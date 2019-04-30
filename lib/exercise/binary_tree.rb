@@ -62,10 +62,15 @@ module Exercise
     end
 
     def searchable?
-      previous = -Float::INFINITY
-      each_in_order do |value|
-        return false unless value > previous
-        previous = value
+      return true if data.empty?
+      min, max = data.map(&:first).minmax
+      stack = [[0, min..max]]
+      while stack.any?
+        current, constraint = stack.pop
+        current_value = value(current)
+        return false unless constraint.cover?(current_value)
+        stack << [right(current), current_value..constraint.end] if right(current)
+        stack << [left(current), constraint.begin..current_value - 1] if left(current)
       end
       true
     end

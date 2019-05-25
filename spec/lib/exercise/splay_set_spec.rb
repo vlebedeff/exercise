@@ -18,7 +18,7 @@ RSpec.describe Exercise::SplaySet do
       end
 
       describe '#sum' do
-        let(:bounds) { Range.new(*values.shuffle.first(2).sort) }
+        let(:bounds) { Range.new(*values.sample(2).sort) }
         let(:baseline_sum) { baseline_set.reduce(0) { |sum, v| bounds.cover?(v) ? sum + v : v } }
 
         specify do

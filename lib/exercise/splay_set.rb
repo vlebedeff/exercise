@@ -68,6 +68,16 @@ module Exercise
               new_left = z.path.last.node.attach_right(z.node.left)
               SplaySet.new(node: node.attach_left(new_left))
             end
+          elsif z.path.size == 2
+            grandparent = z.path.prev.value.node
+            parent = z.path.last.node
+            if z.path.last.direction == :left && z.path.prev.value.direction == :left
+              new_right = parent.attach_right(grandparent.attach_left(parent.right)).attach_left(z.node.right)
+              SplaySet.new(node: z.node.attach_right(new_right))
+            elsif z.path.last.direction == :right && z.path.prev.value.direction == :right
+              new_left = parent.attach_left(grandparent.attach_right(parent.left)).attach_right(z.node.left)
+              SplaySet.new(node: z.node.attach_left(new_left))
+            end
           else
             z
           end

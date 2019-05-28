@@ -19,7 +19,7 @@ RSpec.describe Exercise::SplaySet do
 
       describe '#sum' do
         let(:bounds) { Range.new(*values.sample(2).sort) }
-        let(:baseline_sum) { baseline_set.reduce(0) { |sum, v| bounds.cover?(v) ? sum + v : v } }
+        let(:baseline_sum) { baseline_set.reduce(0) { |sum, v| bounds.cover?(v) ? sum + v : sum } }
 
         specify do
           expect(splay_set.sum(bounds)).to eq(baseline_sum)
@@ -29,6 +29,7 @@ RSpec.describe Exercise::SplaySet do
   end
 
   it_behaves_like 'splay tree set', 2
+  it_behaves_like 'splay tree set', 3
 
   describe '#empty?' do
     subject { described_class.new.empty? }

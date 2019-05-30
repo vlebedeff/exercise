@@ -1,7 +1,14 @@
 RSpec.describe Exercise::SplaySet do
-  shared_examples 'splay tree set' do |size|
+  shared_examples 'splay tree set' do |size, order|
     context 'when values are inserted in ascending order' do
-      let(:values) { Array.new(size) { |i| i } }
+      let(:values) do
+        initial = Array.new(size) { |i| i }
+        case order
+        when :asc then initial
+        when :desc then initial
+        else initial
+        end
+      end
       let(:baseline_set) { Set.new(values) }
 
       subject(:splay_set) do
@@ -18,18 +25,47 @@ RSpec.describe Exercise::SplaySet do
       end
 
       describe '#sum' do
-        let(:bounds) { Range.new(*values.sample(2).sort) }
         let(:baseline_sum) { baseline_set.reduce(0) { |sum, v| bounds.cover?(v) ? sum + v : sum } }
 
-        specify do
-          expect(splay_set.sum(bounds)).to eq(baseline_sum)
+        context 'first two values' do
+          let(:bounds) { Range.new(*values.sort.first(2)) }
+
+          specify do
+            expect(splay_set.sum(bounds)).to eq(baseline_sum)
+          end
+        end
+
+        context 'last two values' do
+          let(:bounds) { Range.new(*values.sort.last(2)) }
+
+          specify do
+            expect(splay_set.sum(bounds)).to eq(baseline_sum)
+          end
+        end
+
+        context 'random range' do
+          let(:bounds) { Range.new(*values.sample(2).sort) }
+
+          specify do
+            expect(splay_set.sum(bounds)).to eq(baseline_sum)
+          end
         end
       end
     end
   end
 
-  it_behaves_like 'splay tree set', 2
-  it_behaves_like 'splay tree set', 3
+  it_behaves_like 'splay tree set', 2, :asc
+  it_behaves_like 'splay tree set', 2, :desc
+  it_behaves_like 'splay tree set', 2, :rand
+  it_behaves_like 'splay tree set', 3, :asc
+  it_behaves_like 'splay tree set', 3, :desc
+  it_behaves_like 'splay tree set', 3, :rand
+  it_behaves_like 'splay tree set', 4, :asc
+  it_behaves_like 'splay tree set', 4, :desc
+  it_behaves_like 'splay tree set', 4, :rand
+  it_behaves_like 'splay tree set', 5, :asc
+  it_behaves_like 'splay tree set', 5, :desc
+  it_behaves_like 'splay tree set', 5, :rand
 
   describe '#empty?' do
     subject { described_class.new.empty? }

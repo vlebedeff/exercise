@@ -59,6 +59,8 @@ module Exercise
     def splay
       z = self
       while z.path.any?
+        parent = z.path.last.node
+        grandparent = z.path.prev.value && z.path.prev.value.node
         z =
           if z.path.size == 1 && z.path.last.direction == :left
             new_right = z.path.last.node.attach_left(z.node.right)
@@ -67,22 +69,23 @@ module Exercise
             new_left = z.path.last.node.attach_right(z.node.left)
             SplaySet.new(node: node.attach_left(new_left))
           else
-            grandparent = z.path.prev.value.node
-            parent = z.path.last.node
+            new_path = z.path.pop.pop
             if z.path.last.direction == :left && z.path.prev.value.direction == :left
               new_right = parent.attach_right(grandparent.attach_left(parent.right)).attach_left(z.node.right)
-              SplaySet.new(node: z.node.attach_right(new_right), path: z.path.pop.pop)
+              SplaySet.new(node: z.node.attach_right(new_right), path: new_path)
+            elsif z.path.last.direction == :right && z.path.prev.value.direction == :right
+              new_left = parent.attach_left(grandparent.attach_right(parent.left)).attach_right(z.node.left)
+              SplaySet.new(node: z.node.attach_left(new_left), path: new_path)
             elsif z.path.last.direction == :left && z.path.prev.value.direction == :right
               new_left = grandparent.attach_right(z.node.left)
               new_right = parent.attach_left(z.node.right)
-              SplaySet.new(node: z.node.attach_left(new_left).attach_right(new_right), path: z.path.pop.pop)
+              new_node = Node.new(z.node.value, new_left, new_right)
+              SplaySet.new(node: new_node, path: new_path)
             elsif z.path.last.direction == :right && z.path.prev.value.direction == :left
               new_left = parent.attach_right(z.node.left)
               new_right = grandparent.attach_left(z.node.right)
-              SplaySet.new(node: z.node.attach_left(new_left).attach_right(new_right), path: z.path.pop.pop)
-            elsif z.path.last.direction == :right && z.path.prev.value.direction == :right
-              new_left = parent.attach_left(grandparent.attach_right(parent.left)).attach_right(z.node.left)
-              SplaySet.new(node: z.node.attach_left(new_left), path: z.path.pop.pop)
+              new_node = Node.new(z.node.value, new_left, new_right)
+              SplaySet.new(node: new_node, path: new_path)
             end
           end
       end

@@ -5,8 +5,8 @@ RSpec.describe Exercise::SplaySet do
         initial = Array.new(size) { |i| i }
         case order
         when :asc then initial
-        when :desc then initial
-        else initial
+        when :desc then initial.reverse
+        else initial.shuffle
         end
       end
       let(:baseline_set) { Set.new(values) }
@@ -54,18 +54,15 @@ RSpec.describe Exercise::SplaySet do
     end
   end
 
-  it_behaves_like 'splay tree set', 2, :asc
-  it_behaves_like 'splay tree set', 2, :desc
-  it_behaves_like 'splay tree set', 2, :rand
-  it_behaves_like 'splay tree set', 3, :asc
-  it_behaves_like 'splay tree set', 3, :desc
-  it_behaves_like 'splay tree set', 3, :rand
+  # [2, 3, 4, 5, 8, 13, 21, 40, 100, 1000].first(3).each do |size|
+  #   it_behaves_like 'splay tree set', size, :asc
+  #   it_behaves_like 'splay tree set', size, :desc
+  #   it_behaves_like 'splay tree set', size, :rand
+  # end
   it_behaves_like 'splay tree set', 4, :asc
   it_behaves_like 'splay tree set', 4, :desc
   it_behaves_like 'splay tree set', 4, :rand
-  it_behaves_like 'splay tree set', 5, :asc
-  it_behaves_like 'splay tree set', 5, :desc
-  it_behaves_like 'splay tree set', 5, :rand
+  # 3, 1, 0, 2 fails
 
   describe '#empty?' do
     subject { described_class.new.empty? }

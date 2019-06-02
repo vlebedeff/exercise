@@ -1,5 +1,5 @@
 module Exercise
-  class SplaySet
+  class SplaySet # rubocop:disable Metrics/ClassLength
     attr_reader :node, :path
 
     def initialize(node: nil, path: Stack.new(nil, nil, 0))
@@ -56,25 +56,27 @@ module Exercise
       prune_right.node.sum
     end
 
-    def splay
+    def splay # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       z = self
       while z.path.any?
         parent = z.path.last.node
         grandparent = z.path.prev.value && z.path.prev.value.node
         z =
           if z.path.size == 1 && z.path.last.direction == :left
-            new_right = z.path.last.node.attach_left(z.node.right)
-            SplaySet.new(node: node.attach_right(new_right))
+            new_right = parent.attach_left(z.node.right)
+            SplaySet.new(node: z.node.attach_right(new_right))
           elsif z.path.size == 1 && z.path.last.direction == :right
-            new_left = z.path.last.node.attach_right(z.node.left)
-            SplaySet.new(node: node.attach_left(new_left))
+            new_left = parent.attach_right(z.node.left)
+            SplaySet.new(node: z.node.attach_left(new_left))
           else
             new_path = z.path.pop.pop
             if z.path.last.direction == :left && z.path.prev.value.direction == :left
-              new_right = parent.attach_right(grandparent.attach_left(parent.right)).attach_left(z.node.right)
+              new_right =
+                parent.attach_right(grandparent.attach_left(parent.right)).attach_left(z.node.right)
               SplaySet.new(node: z.node.attach_right(new_right), path: new_path)
             elsif z.path.last.direction == :right && z.path.prev.value.direction == :right
-              new_left = parent.attach_left(grandparent.attach_right(parent.left)).attach_right(z.node.left)
+              new_left =
+                parent.attach_left(grandparent.attach_right(parent.left)).attach_right(z.node.left)
               SplaySet.new(node: z.node.attach_left(new_left), path: new_path)
             elsif z.path.last.direction == :left && z.path.prev.value.direction == :right
               new_left = grandparent.attach_right(z.node.left)

@@ -54,15 +54,20 @@ RSpec.describe Exercise::SplaySet do
     end
   end
 
-  # [2, 3, 4, 5, 8, 13, 21, 40, 100, 1000].first(3).each do |size|
-  #   it_behaves_like 'splay tree set', size, :asc
-  #   it_behaves_like 'splay tree set', size, :desc
-  #   it_behaves_like 'splay tree set', size, :rand
-  # end
-  it_behaves_like 'splay tree set', 4, :asc
-  it_behaves_like 'splay tree set', 4, :desc
-  it_behaves_like 'splay tree set', 4, :rand
-  # 3, 1, 0, 2 fails
+  describe '#find' do
+    let(:values) { [1, 3, 0, 2] }
+    let(:set) { values.reduce(described_class.new) { |s, v| s.insert(v) } }
+
+    specify do
+      expect(values.map { |v| set.find(v).node.value }).to eq(values)
+    end
+  end
+
+  [2, 3, 4, 5, 8, 13, 21, 40, 100, 1000].each do |size|
+    it_behaves_like 'splay tree set', size, :asc
+    it_behaves_like 'splay tree set', size, :desc
+    it_behaves_like 'splay tree set', size, :rand
+  end
 
   describe '#empty?' do
     subject { described_class.new.empty? }

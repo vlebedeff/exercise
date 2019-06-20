@@ -23,6 +23,22 @@ module Exercise
       end
     end
 
+    def delete(value)
+      set = find(value).splay
+      return set if set.node.value != value
+      new_root =
+        if set.node.left && set.node.right
+          set.node.left.attach_right(set.node.right.attach_left(set.node.left.right))
+        elsif set.node.left
+          set.node.left
+        elsif set.node.right
+          set.node.right
+        else
+          nil
+        end
+      SplaySet.new(node: new_root)
+    end
+
     def go_left
       return self unless node.left
       SplaySet.new(node: node.left, path: path.push(Step.new(node, :left)))

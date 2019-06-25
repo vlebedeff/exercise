@@ -30,10 +30,7 @@ RSpec.describe Exercise::SplaySet do
 
         specify do
           values_found = values.select { |v| splay_subset.find(v).node.value == v }
-          expect(values_found).to(
-            eq(values.reject { |x| x == deleted_element }),
-            "initial: #{values.inspect}; deleted: #{deleted_element}"
-          )
+          expect(values_found).to eq(values.reject { |x| x == deleted_element })
         end
       end
 
@@ -76,10 +73,10 @@ RSpec.describe Exercise::SplaySet do
     end
   end
 
-  [2, 3, 4, 5, 8, 13, 21, 40, 100, 1000].first(5).each do |size|
+  [2, 3, 4, 5, 8, 13, 21, 40, 128, 256].each do |size|
     it_behaves_like 'splay tree set', size, :asc
-    # it_behaves_like 'splay tree set', size, :desc
-    # it_behaves_like 'splay tree set', size, :rand
+    it_behaves_like 'splay tree set', size, :desc
+    it_behaves_like 'splay tree set', size, :rand
   end
 
   describe '#empty?' do

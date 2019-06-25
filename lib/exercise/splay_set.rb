@@ -23,20 +23,30 @@ module Exercise
       end
     end
 
+    def split
+      return [self, self] if empty?
+      [SplaySet.new(node: node.left), SplaySet.new(node: node.right)]
+    end
+
+    def join(another)
+      return self if another.empty?
+      return another if empty?
+      parent, child = node.rank >= another.node.rank ? [self, another] : [another, self]
+      insertion_point = parent.find(child.node.value)
+      new_node =
+        if insertion_point.node.value > child.node.value
+          insertion_point.node.attach_left(child.node)
+        else
+          insertion_point.node.attach_right(child.node)
+        end
+      SplaySet.new(node: new_node, path: insertion_point.path).splay
+    end
+
     def delete(value)
       set = find(value).splay
       return set if set.node.value != value
-      new_root =
-        if set.node.left && set.node.right
-          set.node.left.attach_right(set.node.right.attach_left(set.node.left.right))
-        elsif set.node.left
-          set.node.left
-        elsif set.node.right
-          set.node.right
-        else
-          nil
-        end
-      SplaySet.new(node: new_root)
+      set1, set2 = set.split
+      set1.join(set2)
     end
 
     def go_left
@@ -112,7 +122,7 @@ module Exercise
 
     ###########################################
 
-    Node = Struct.new(:value, :left, :right) do
+    Node = Struct.new(:value, :left, :right) do # rubocop:disable Metrics/BlockLength
       def attach_left(node)
         Node.new(value, node, right)
       end
@@ -135,6 +145,16 @@ module Exercise
             l_sum = left ? left.sum : 0
             r_sum = right ? right.sum : 0
             l_sum + value + r_sum
+          end
+      end
+
+      def rank
+        @rank ||=
+          begin
+            self_rank = 0
+            left_rank = left ? left.rank + 1 : 0
+            right_rank = right ? right.rank + 1 : 0
+            [left_rank, right_rank, self_rank].max
           end
       end
     end

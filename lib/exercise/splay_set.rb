@@ -60,8 +60,8 @@ module Exercise
     end
 
     def find(value)
-      return nil if empty?
       z = self
+      return z if z.empty?
       loop do
         if z.node.value < value && z.node.right
           z = z.go_right
@@ -76,10 +76,20 @@ module Exercise
     def sum(range)
       return 0 if empty?
       splay_left = find(range.begin).splay
-      prune_left = SplaySet.new(node: splay_left.node.prune_left)
+      prune_left =
+        if splay_left.node.value >= range.begin
+          SplaySet.new(node: splay_left.node.prune_left)
+        else
+          SplaySet.new(node: splay_left.node.right)
+        end
       splay_right = prune_left.find(range.end).splay
-      prune_right = SplaySet.new(node: splay_right.node.prune_right)
-      prune_right.node.sum
+      prune_right =
+        if splay_right.node.value <= range.end
+          SplaySet.new(node: splay_right.node.prune_right)
+        else
+          SplaySet.new(node: splay_right.node.left)
+        end
+      prune_right.node ? prune_right.node.sum : 0
     end
 
     def splay # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity

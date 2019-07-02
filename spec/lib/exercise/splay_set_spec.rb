@@ -60,6 +60,39 @@ RSpec.describe Exercise::SplaySet do
             expect(splay_set.sum(bounds)).to eq(baseline_sum)
           end
         end
+
+        context 'first and last values' do
+          let(:bounds) { Range.new(*values.minmax) }
+
+          specify do
+            expect(splay_set.sum(bounds)).to eq(baseline_sum)
+          end
+        end
+
+        context 'when right bound is bigger than max value' do
+          let(:bounds) { Range.new(values.sample, values.max + 10) }
+
+          specify do
+            expect(splay_set.sum(bounds)).to eq(baseline_sum)
+          end
+        end
+
+        context 'when left bound is less than min value' do
+          let(:bounds) { Range.new(values.min - 1, values.sample) }
+
+          specify do
+            expect(splay_set.sum(bounds)).to eq(baseline_sum)
+          end
+        end
+
+        context 'when bounds are equal' do
+          let(:value) { values.sample }
+          let(:bounds) { Range.new(value, value) }
+
+          specify do
+            expect(splay_set.sum(bounds)).to eq(baseline_sum)
+          end
+        end
       end
     end
   end
@@ -73,7 +106,7 @@ RSpec.describe Exercise::SplaySet do
     end
   end
 
-  [2, 3, 4, 5, 8, 13, 21, 40, 128, 256].each do |size|
+  [2, 3, 4, 5, 8, 13, 21, 40, 128].each do |size|
     it_behaves_like 'splay tree set', size, :asc
     it_behaves_like 'splay tree set', size, :desc
     it_behaves_like 'splay tree set', size, :rand
@@ -99,5 +132,22 @@ RSpec.describe Exercise::SplaySet do
     it { is_expected.not_to be_empty }
 
     specify { expect(subject.node.value).to eq(0) }
+  end
+
+  describe '#sum' do
+    subject(:splay_set) { described_class.new }
+
+    specify do
+      s = splay_set.insert(3)
+      s = s.insert(5)
+      expect(s.sum(2..4)).to eq(3)
+      expect(s.sum(4..7)).to eq(5)
+    end
+  end
+
+  describe '#find' do
+    subject(:found) { described_class.new.find(42) }
+
+    specify { expect(found).to be_empty }
   end
 end

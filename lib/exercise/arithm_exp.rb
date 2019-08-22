@@ -6,6 +6,8 @@ module Exercise
       @min_max = Array.new(@operands.size) { Array.new(@operands.size) }
     end
 
+    # Calculates maximum result of arithmetic expression that is possible to get by adding braces to
+    # it
     def maximum
       max_at(0, @operands.size - 1)
     end

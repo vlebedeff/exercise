@@ -61,6 +61,8 @@ module Exercise
       end
     end
 
+    # Checks whether a tree is a binary search tree where any parent node value is greater than any
+    # value in its left subtree and less than or equal to any value in its right subtree
     def searchable?
       return true if data.empty?
       min, max = data.map(&:first).minmax

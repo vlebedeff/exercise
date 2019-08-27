@@ -1,5 +1,6 @@
 RSpec.describe Exercise::ParallelProcessor do
   let(:examples) do
+    # [worker_count, jobs] => [[j1, j1_started_at], [j2, j2_started_at], ..., [jn, jn_started_at]]
     {
       [1, Array.new(10) { 1 }] => Array.new(10) { |i| [0, i] },
       [2, Array.new(10) { 1 }] => Array.new(5) { |i| [[0, i], [1, i]] }.reduce(&:concat),

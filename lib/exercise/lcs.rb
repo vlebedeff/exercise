@@ -1,4 +1,6 @@
 module Exercise
+  # Longest common subsequence of two strings that appears in the same relative order, but not
+  # necessarily contiguous
   def lcs(s1, s2)
     table = Array.new(s1.size + 1) { Array.new(s2.size + 1) { 0 } }
     1.upto(s1.size) do |i|
@@ -14,6 +16,7 @@ module Exercise
     table[s1.size][s2.size]
   end
 
+  # Longest common subsequence of three strings
   def lcs3(s1, s2, s3)
     table = Array.new(s1.size + 1) { Array.new(s2.size + 1) { Array.new(s3.size + 1) { 0 } } }
     1.upto(s1.size) do |i|

@@ -1,5 +1,6 @@
 module Exercise
   # Calculates the minimum number of points so that each given segment contains at least one point
+  #
   # @param segments [Array<Array(Integer, Integer)>] line segments
   # @return points [Array<Number>]
   def min_segment_coverage(segments)

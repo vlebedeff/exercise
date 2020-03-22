@@ -24,6 +24,7 @@ require 'exercise/parallel_processor'
 require 'exercise/disjoint_set'
 require 'exercise/merger'
 require 'exercise/flow'
+require 'exercise/gaussian'
 
 module Exercise
   def max_pairwise_product(numbers)

@@ -9,5 +9,5 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-doc'
   gem 'rspec'
-  gem 'rubocop'
+  gem 'rubocop', require: false
 end

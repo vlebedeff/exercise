@@ -1,0 +1,10 @@
+--style=1tbs
+--lineend=linux
+--suffix=none
+--indent=spaces=4
+--break-blocks
+--pad-oper
+--delete-empty-lines
+--align-pointer=name
+--max-code-length=100
+--verbose

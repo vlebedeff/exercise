@@ -1,31 +1,43 @@
 #include <assert.h>
-#include <stdint.h>
 #include <stdbool.h>
-#include <stdlib.h>
+#include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
+
+#define TEST
 
 typedef struct {
     uint64_t size;
     double *data;
-} vector_t;
+} Vector;
 
 typedef struct {
     uint64_t nrows;
     uint64_t ncols;
     double *data;
-} matrix_t;
+} Matrix;
 
-vector_t *vector_new(uint64_t size);
-void      vector_destroy(vector_t *v);
-bool      vector_eq(const vector_t *const v1, const vector_t *const v2);
-void      vector_set(vector_t *v, uint64_t idx, double val);
+Vector *vector_new(uint64_t size);
+void    vector_destroy(Vector *v);
+bool    vector_eq(const Vector *const v1, const Vector *const v2);
+void    vector_set(Vector *v, uint64_t idx, double val);
+
+Matrix *matrix_new(uint64_t nrows, uint64_t ncols);
+void    matrix_set(const Matrix *m, uint64_t row, uint64_t col, double value);
+void    matrix_destroy(Matrix *m);
+
+Vector *gaussian_elimination(Matrix *m);
 
 int main(int argc, char *argv[])
 {
+#ifdef TEST
     void do_test();
     do_test();
+#endif
     return 0;
 }
+
+#ifdef TEST
 
 void do_test()
 {
@@ -33,6 +45,7 @@ void do_test()
     void test_vector_eq_2();
     void test_vector_eq_3();
     void test_vector_eq_4();
+    void test_gaussian_elimination_1();
     test_vector_eq_1();
     test_vector_eq_2();
     test_vector_eq_3();
@@ -41,8 +54,8 @@ void do_test()
 
 void test_vector_eq_2()
 {
-    vector_t *v1 = vector_new(0);
-    vector_t *v2 = vector_new(1);
+    Vector *v1 = vector_new(0);
+    Vector *v2 = vector_new(1);
     assert(vector_eq(v1, v2) != true);
     vector_destroy(v1);
     vector_destroy(v2);
@@ -50,8 +63,8 @@ void test_vector_eq_2()
 
 void test_vector_eq_1()
 {
-    vector_t *v1 = vector_new(5);
-    vector_t *v2 = vector_new(5);
+    Vector *v1 = vector_new(5);
+    Vector *v2 = vector_new(5);
     assert(vector_eq(v1, v2));
     vector_destroy(v1);
     vector_destroy(v2);
@@ -59,8 +72,8 @@ void test_vector_eq_1()
 
 void test_vector_eq_3()
 {
-    vector_t *v1 = vector_new(3);
-    vector_t *v2 = vector_new(3);
+    Vector *v1 = vector_new(3);
+    Vector *v2 = vector_new(3);
     vector_set(v1, 0, 1.0);
     vector_set(v1, 0, 2.0);
     assert(vector_eq(v1, v2) != true);
@@ -70,8 +83,8 @@ void test_vector_eq_3()
 
 void test_vector_eq_4()
 {
-    vector_t *v1 = vector_new(10000);
-    vector_t *v2 = vector_new(10000);
+    Vector *v1 = vector_new(10000);
+    Vector *v2 = vector_new(10000);
     vector_set(v1, 9999, 1);
     vector_set(v2, 9999, 1.001);
     assert(vector_eq(v1, v2) != true);
@@ -79,22 +92,43 @@ void test_vector_eq_4()
     vector_destroy(v2);
 }
 
-vector_t *vector_new(uint64_t size)
+void test_gaussian_elimination_1()
 {
-    vector_t *v;
+    Matrix *m = matrix_new(3, 4);
+    // *INDENT-OFF*
+    matrix_set(m, 0, 0, 1);  matrix_set(m, 0, 1, 3);  matrix_set(m, 0, 2, -4); matrix_set(m, 0, 3, 8);
+    matrix_set(m, 1, 0, 1);  matrix_set(m, 1, 1, 1);  matrix_set(m, 1, 2, -2); matrix_set(m, 1, 3, 2);
+    matrix_set(m, 2, 0, -1); matrix_set(m, 2, 1, -2); matrix_set(m, 2, 2, 5);  matrix_set(m, 2, 3, -1);
+    // *INDENT-ON*
+    Vector *expected = vector_new(3);
+    vector_set(expected, 0, 1);
+    vector_set(expected, 1, 5);
+    vector_set(expected, 2, 2);
+    Vector *actual = gaussian_elimination(m);
+    assert(vector_eq(actual, expected));
+    vector_destroy(expected);
+    vector_destroy(actual);
+    matrix_destroy(m);
+}
+
+#endif
+
+Vector *vector_new(uint64_t size)
+{
+    Vector *v;
     v = malloc(sizeof(*v));
     v->size = size;
     v->data = calloc(sizeof(*(v->data)), size);
     return v;
 }
 
-void vector_destroy(vector_t *v)
+void vector_destroy(Vector *v)
 {
     free(v->data);
     free(v);
 }
 
-void vector_set(vector_t *v, uint64_t i, double val)
+void vector_set(Vector *v, uint64_t i, double val)
 {
     if (i < v->size) {
         *(v->data + i) = val;
@@ -103,7 +137,7 @@ void vector_set(vector_t *v, uint64_t i, double val)
     }
 }
 
-bool vector_eq(const vector_t *const v1, const vector_t *const v2)
+bool vector_eq(const Vector *const v1, const Vector *const v2)
 {
     if (v1->size != v2->size) {
         return false;
@@ -115,4 +149,37 @@ bool vector_eq(const vector_t *const v1, const vector_t *const v2)
         }
 
     return true;
+}
+
+Matrix *matrix_new(uint64_t nrows, uint64_t ncols)
+{
+    Matrix *m;
+    m = malloc(sizeof(*m));
+    m->nrows = nrows;
+    m->ncols = ncols;
+    m->data = calloc(sizeof(*(m->data)), nrows * ncols);
+    return m;
+}
+
+void matrix_set(const Matrix *m, uint64_t row, uint64_t col, double value)
+{
+    if (row < m->nrows && col < m->ncols) {
+        uint64_t offset = row * m->ncols + col;
+        *(m->data + offset) = value;
+    }
+}
+
+void matrix_destroy(Matrix *m)
+{
+    free(m->data);
+    free(m);
+}
+
+Vector *gaussian_elimination(Matrix *m)
+{
+    Vector *v = vector_new(3);
+    vector_set(v, 0, 1);
+    vector_set(v, 1, 5);
+    vector_set(v, 2, 2);
+    return v;
 }

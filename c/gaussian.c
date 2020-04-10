@@ -18,6 +18,7 @@ typedef struct {
 } Matrix;
 
 Vector *vector_new(uint64_t size);
+Vector *vector_new_with_data(uint64_t, double[]);
 void    vector_destroy(Vector *v);
 bool    vector_eq(const Vector *const v1, const Vector *const v2);
 void    vector_set(Vector *v, uint64_t idx, double val);
@@ -52,20 +53,20 @@ void do_test()
     test_vector_eq_4();
 }
 
-void test_vector_eq_2()
-{
-    Vector *v1 = vector_new(0);
-    Vector *v2 = vector_new(1);
-    assert(vector_eq(v1, v2) != true);
-    vector_destroy(v1);
-    vector_destroy(v2);
-}
-
 void test_vector_eq_1()
 {
     Vector *v1 = vector_new(5);
     Vector *v2 = vector_new(5);
     assert(vector_eq(v1, v2));
+    vector_destroy(v1);
+    vector_destroy(v2);
+}
+
+void test_vector_eq_2()
+{
+    Vector *v1 = vector_new(0);
+    Vector *v2 = vector_new(1);
+    assert(vector_eq(v1, v2) != true);
     vector_destroy(v1);
     vector_destroy(v2);
 }
@@ -88,6 +89,15 @@ void test_vector_eq_4()
     vector_set(v1, 9999, 1);
     vector_set(v2, 9999, 1.001);
     assert(vector_eq(v1, v2) != true);
+    vector_destroy(v1);
+    vector_destroy(v2);
+}
+
+void test_vector_eq_5()
+{
+    Vector *v1 = vector_new(3);
+    Vector *v2 = vector_new_with_data(3, (double) { 0, 0, 0 });
+    assert(vector_eq(v1, v2));
     vector_destroy(v1);
     vector_destroy(v2);
 }

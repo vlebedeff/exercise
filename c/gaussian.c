@@ -35,11 +35,13 @@ void do_test()
     void test_matrix_new_1();
     void test_matrix_init_1();
     void test_matrix_copy_1();
+    void test_matrix_get();
     void test_gaussian_elimination_1();
     void test_gaussian_elimination_2();
     test_matrix_new_1();
     test_matrix_init_1();
     test_matrix_copy_1();
+    test_matrix_get();
     /* test_gaussian_elimination_1(); */
     /* test_gaussian_elimination_2(); */
 }
@@ -119,6 +121,24 @@ void test_matrix_copy_1()
     assert(*(m2->data + 3) == 7.0);
     assert(*(m2->data + 4) == 6.0);
     assert(*(m2->data + 5) == 5.0);
+    matrix_destroy(m1);
+    matrix_destroy(m2);
+}
+
+void test_matrix_get()
+{
+    Matrix *m = matrix_new(2, 3);
+    matrix_init(m,
+                1.0, 2.0, 3.0,
+                7.0, 6.0, 5.0
+               );
+    assert(matrix_get(m, 0, 0) == 1.0);
+    assert(matrix_get(m, 0, 1) == 2.0);
+    assert(matrix_get(m, 0, 2) == 3.0);
+    assert(matrix_get(m, 1, 0) == 7.0);
+    assert(matrix_get(m, 1, 1) == 6.0);
+    assert(matrix_get(m, 1, 2) == 5.0);
+    matrix_destroy(m);
 }
 
 Matrix *matrix_new(uint64_t nrows, uint64_t ncols)
@@ -158,7 +178,7 @@ double matrix_get(const Matrix *m, uint64_t i, uint64_t j)
         exit(1);
     }
 
-    uint64_t offset = i * m->ncols + m->ncols;
+    uint64_t offset = i * m->ncols + j;
     return *(m->data + offset);
 }
 

@@ -18,7 +18,7 @@ Matrix *matrix_init(Matrix *, ...);
 double  matrix_get(const Matrix *, uint64_t, uint64_t);
 void    matrix_set(const Matrix *m, uint64_t row, uint64_t col, double value);
 bool    matrix_eq(Matrix *, Matrix *);
-void    matrix_print(Matrix *);
+void    matrix_print(Matrix *, char *);
 Matrix *matrix_copy(Matrix *);
 void    matrix_destroy(Matrix *m);
 Matrix *gaussian_elimination(Matrix *);
@@ -42,23 +42,23 @@ void do_test()
     test_matrix_init_1();
     test_matrix_copy_1();
     test_matrix_get();
-    /* test_gaussian_elimination_1(); */
+    test_gaussian_elimination_1();
     /* test_gaussian_elimination_2(); */
 }
 
 void test_gaussian_elimination_1()
 {
     Matrix *m = matrix_new(3, 4);
-    matrix_init(m,
-                1.0, 3.0, -4.0, 8.0,
-                1.0, 1.0, -2.0, 2.0,
-                -1.0, -2.0, 5.0, -1.0
-               );
+    matrix_init(
+        m,
+        1.0, 3.0, -4.0, 8.0,
+        1.0, 1.0, -2.0, 2.0,
+        -1.0, -2.0, 5.0, -1.0
+    );
     Matrix *expected = matrix_new(3, 1);
     matrix_init(expected, 1.0, 5.0, 2.0);
     Matrix *actual = gaussian_elimination(m);
-    matrix_print(actual);
-    /* assert(matrix_eq(actual, expected)); */
+    assert(matrix_eq(actual, expected));
     matrix_destroy(expected);
     matrix_destroy(actual);
     matrix_destroy(m);
@@ -68,11 +68,12 @@ void test_gaussian_elimination_2()
 {
     Matrix *in = matrix_new(3, 4);
     Matrix *expected = matrix_new(3, 1);
-    matrix_init(in,
-                2.0, 1.0, -1.0, 8.0,
-                -3.0, -1.0, 2.0, -11.0
-                - 2.0, 1.0, 2.0, -3.0
-               );
+    matrix_init(
+        in,
+        2.0, 1.0, -1.0, 8.0,
+        -3.0, -1.0, 2.0, -11.0
+        - 2.0, 1.0, 2.0, -3.0
+    );
     matrix_init(expected, 2.0, 3.0, -1.0);
     Matrix *actual = gaussian_elimination(in);
     assert(matrix_eq(actual, expected));
@@ -92,10 +93,11 @@ void test_matrix_new_1()
 void test_matrix_init_1()
 {
     Matrix *m = matrix_new(2, 3);
-    matrix_init(m,
-                1.0, 2.0, 3.0,
-                7.0, 6.0, 5.0
-               );
+    matrix_init(
+        m,
+        1.0, 2.0, 3.0,
+        7.0, 6.0, 5.0
+    );
     assert(*(m->data) == 1.0);
     assert(*(m->data + 1) == 2.0);
     assert(*(m->data + 2) == 3.0);
@@ -226,12 +228,13 @@ void matrix_set(const Matrix *m, uint64_t row, uint64_t col, double value)
     }
 }
 
-void matrix_print(Matrix *m)
+void matrix_print(Matrix *m, char *name)
 {
     uint64_t i;
+    printf("%s\n", name);
 
-    for (i = 0; i < m->nrows * m->ncols; i++) {
-        printf("%6.2f", *(m->data + i));
+    for (i = 0; i < m->nitems; i++) {
+        printf((i + 1) % m->ncols == 0 ? "%8.2f\n" : "%8.2f", *(m->data + i));
     }
 
     printf("\n");
@@ -271,6 +274,7 @@ Matrix *gaussian_elimination(Matrix *original)
         }
 
         // eliminate column i under ith row
+
         for (j = i + 1; j < m->nrows; ++j) {
             factor = matrix_get(m, j, i) / matrix_get(m, i, i);
 
@@ -282,7 +286,6 @@ Matrix *gaussian_elimination(Matrix *original)
     }
 
     result = matrix_new(m->nrows, 1);
-    matrix_print(result);
 
     for (i = m->nrows; i > 0; --i) {
         fbuf = matrix_get(m, i - 1, m->ncols - 1);
@@ -292,8 +295,6 @@ Matrix *gaussian_elimination(Matrix *original)
         }
 
         matrix_set(result, i - 1, 0, fbuf / matrix_get(m, i - 1, i - 1));
-        printf("\t");
-        matrix_print(result);
     }
 
     return result;

@@ -3,13 +3,8 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#define TEST
-
-typedef struct {
-    uint64_t size;
-    double *data;
-} Vector;
+#include <math.h>
+#include <stdarg.h>
 
 typedef struct {
     uint64_t nrows;
@@ -17,148 +12,102 @@ typedef struct {
     double *data;
 } Matrix;
 
-Vector *vector_new(uint64_t size);
-Vector *vector_new_with_data(uint64_t, double[]);
-void    vector_destroy(Vector *v);
-bool    vector_eq(const Vector *const v1, const Vector *const v2);
-void    vector_set(Vector *v, uint64_t idx, double val);
-
-Matrix *matrix_new(uint64_t nrows, uint64_t ncols);
+Matrix *matrix_new(uint64_t, uint64_t);
+Matrix *matrix_init(Matrix *, ...);
+double  matrix_get(const Matrix *, uint64_t, uint64_t);
 void    matrix_set(const Matrix *m, uint64_t row, uint64_t col, double value);
+bool    matrix_eq(Matrix *, Matrix *);
+void    matrix_print(Matrix *);
+Matrix *matrix_copy(Matrix *);
 void    matrix_destroy(Matrix *m);
-
-Vector *gaussian_elimination(Matrix *m);
+Matrix *gaussian_elimination(Matrix *);
 
 int main(int argc, char *argv[])
 {
-#ifdef TEST
     void do_test();
     do_test();
-#endif
     return 0;
 }
 
-#ifdef TEST
-
 void do_test()
 {
-    void test_vector_eq_1();
-    void test_vector_eq_2();
-    void test_vector_eq_3();
-    void test_vector_eq_4();
+    void test_matrix_init_1();
+    void test_matrix_copy_1();
     void test_gaussian_elimination_1();
-    test_vector_eq_1();
-    test_vector_eq_2();
-    test_vector_eq_3();
-    test_vector_eq_4();
-}
-
-void test_vector_eq_1()
-{
-    Vector *v1 = vector_new(5);
-    Vector *v2 = vector_new(5);
-    assert(vector_eq(v1, v2));
-    vector_destroy(v1);
-    vector_destroy(v2);
-}
-
-void test_vector_eq_2()
-{
-    Vector *v1 = vector_new(0);
-    Vector *v2 = vector_new(1);
-    assert(vector_eq(v1, v2) != true);
-    vector_destroy(v1);
-    vector_destroy(v2);
-}
-
-void test_vector_eq_3()
-{
-    Vector *v1 = vector_new(3);
-    Vector *v2 = vector_new(3);
-    vector_set(v1, 0, 1.0);
-    vector_set(v1, 0, 2.0);
-    assert(vector_eq(v1, v2) != true);
-    vector_destroy(v1);
-    vector_destroy(v2);
-}
-
-void test_vector_eq_4()
-{
-    Vector *v1 = vector_new(10000);
-    Vector *v2 = vector_new(10000);
-    vector_set(v1, 9999, 1);
-    vector_set(v2, 9999, 1.001);
-    assert(vector_eq(v1, v2) != true);
-    vector_destroy(v1);
-    vector_destroy(v2);
-}
-
-void test_vector_eq_5()
-{
-    Vector *v1 = vector_new(3);
-    Vector *v2 = vector_new_with_data(3, (double) { 0, 0, 0 });
-    assert(vector_eq(v1, v2));
-    vector_destroy(v1);
-    vector_destroy(v2);
+    void test_gaussian_elimination_2();
+    test_matrix_init_1();
+    test_matrix_copy_1();
+    /* test_gaussian_elimination_1(); */
+    /* test_gaussian_elimination_2(); */
 }
 
 void test_gaussian_elimination_1()
 {
     Matrix *m = matrix_new(3, 4);
-    // *INDENT-OFF*
-    matrix_set(m, 0, 0, 1);  matrix_set(m, 0, 1, 3);  matrix_set(m, 0, 2, -4); matrix_set(m, 0, 3, 8);
-    matrix_set(m, 1, 0, 1);  matrix_set(m, 1, 1, 1);  matrix_set(m, 1, 2, -2); matrix_set(m, 1, 3, 2);
-    matrix_set(m, 2, 0, -1); matrix_set(m, 2, 1, -2); matrix_set(m, 2, 2, 5);  matrix_set(m, 2, 3, -1);
-    // *INDENT-ON*
-    Vector *expected = vector_new(3);
-    vector_set(expected, 0, 1);
-    vector_set(expected, 1, 5);
-    vector_set(expected, 2, 2);
-    Vector *actual = gaussian_elimination(m);
-    assert(vector_eq(actual, expected));
-    vector_destroy(expected);
-    vector_destroy(actual);
+    matrix_init(m,
+                1.0, 3.0, -4.0, 8.0,
+                1.0, 1.0, -2.0, 2.0,
+                -1.0, -2.0, 5.0, -1.0
+               );
+    Matrix *expected = matrix_new(3, 1);
+    matrix_init(expected, 1.0, 5.0, 2.0);
+    Matrix *actual = gaussian_elimination(m);
+    matrix_print(actual);
+    /* assert(matrix_eq(actual, expected)); */
+    matrix_destroy(expected);
+    matrix_destroy(actual);
     matrix_destroy(m);
 }
 
-#endif
-
-Vector *vector_new(uint64_t size)
+void test_gaussian_elimination_2()
 {
-    Vector *v;
-    v = malloc(sizeof(*v));
-    v->size = size;
-    v->data = calloc(sizeof(*(v->data)), size);
-    return v;
+    Matrix *in = matrix_new(3, 4);
+    Matrix *expected = matrix_new(3, 1);
+    matrix_init(in,
+                2.0, 1.0, -1.0, 8.0,
+                -3.0, -1.0, 2.0, -11.0
+                - 2.0, 1.0, 2.0, -3.0
+               );
+    matrix_init(expected, 2.0, 3.0, -1.0);
+    Matrix *actual = gaussian_elimination(in);
+    assert(matrix_eq(actual, expected));
+    matrix_destroy(expected);
+    matrix_destroy(actual);
+    matrix_destroy(in);
 }
 
-void vector_destroy(Vector *v)
+void test_matrix_init_1()
 {
-    free(v->data);
-    free(v);
+    Matrix *m = matrix_new(2, 3);
+    matrix_init(m,
+                1.0, 2.0, 3.0,
+                7.0, 6.0, 5.0
+               );
+    assert(*(m->data) == 1.0);
+    assert(*(m->data + 1) == 2.0);
+    assert(*(m->data + 2) == 3.0);
+    assert(*(m->data + 3) == 7.0);
+    assert(*(m->data + 4) == 6.0);
+    assert(*(m->data + 5) == 5.0);
+    matrix_destroy(m);
 }
 
-void vector_set(Vector *v, uint64_t i, double val)
+void test_matrix_copy_1()
 {
-    if (i < v->size) {
-        *(v->data + i) = val;
-    } else {
-        /* Realloc with new size */
-    }
-}
-
-bool vector_eq(const Vector *const v1, const Vector *const v2)
-{
-    if (v1->size != v2->size) {
-        return false;
-    }
-
-    for (uint64_t i = 0; i < v1->size; i++)
-        if (*(v1->data + i) != *(v2->data + i)) {
-            return false;
-        }
-
-    return true;
+    Matrix *m1, *m2;
+    m1 = matrix_new(2, 3);
+    matrix_init(
+        m1,
+        1.0, 2.0, 3.0,
+        7.0, 6.0, 5.0
+    );
+    m2 = matrix_copy(m1);
+    assert(*(m2->data) == 1.0);
+    assert(*(m2->data + 1) == 2.0);
+    assert(*(m2->data + 2) == 3.0);
+    assert(*(m2->data + 3) == 7.0);
+    assert(*(m2->data + 4) == 6.0);
+    assert(*(m2->data + 5) == 5.0);
 }
 
 Matrix *matrix_new(uint64_t nrows, uint64_t ncols)
@@ -171,6 +120,74 @@ Matrix *matrix_new(uint64_t nrows, uint64_t ncols)
     return m;
 }
 
+Matrix *matrix_init(Matrix *m, ...)
+{
+    va_list args;
+    uint64_t i, nitems;
+    nitems = m->nrows * m->ncols;
+    va_start(args, m);
+
+    for (i = 0; i < nitems; i++) {
+        *(m->data + i) = va_arg(args, double);
+    }
+
+    va_end(args);
+    return m;
+}
+
+double matrix_get(const Matrix *m, uint64_t i, uint64_t j)
+{
+    if (i >= m->nrows) {
+        perror("matrix_get: invalid row index");
+        exit(1);
+    }
+
+    if (j >= m->ncols) {
+        perror("matrix_get: invalid column index");
+        exit(1);
+    }
+
+    uint64_t offset = i * m->ncols + m->ncols;
+    return *(m->data + offset);
+}
+
+
+bool matrix_eq(Matrix *m1, Matrix *m2)
+{
+    if (m1->nrows != m2->nrows) {
+        return false;
+    }
+
+    if (m1->ncols != m2->ncols) {
+        return false;
+    }
+
+    uint64_t i, j;
+
+    for (i = 0; i < m1->nrows; ++i) {
+        for (j = 0; j < m1->ncols; ++j) {
+            if (matrix_get(m1, i, j) != matrix_get(m2, i, j)) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+Matrix *matrix_copy(Matrix *m)
+{
+    Matrix *mcopy = matrix_new(m->nrows, m->ncols);
+    uint64_t i, nitems;
+    nitems = mcopy->nrows * mcopy->ncols;
+
+    for (i = 0; i < nitems; i++) {
+        *(mcopy->data + i) = *(m->data + i);
+    }
+
+    return mcopy;
+}
+
 void matrix_set(const Matrix *m, uint64_t row, uint64_t col, double value)
 {
     if (row < m->nrows && col < m->ncols) {
@@ -179,17 +196,75 @@ void matrix_set(const Matrix *m, uint64_t row, uint64_t col, double value)
     }
 }
 
+void matrix_print(Matrix *m)
+{
+    uint64_t i;
+
+    for (i = 0; i < m->nrows * m->ncols; i++) {
+        printf("%6.2f", *(m->data + i));
+    }
+
+    printf("\n");
+}
+
 void matrix_destroy(Matrix *m)
 {
     free(m->data);
     free(m);
 }
 
-Vector *gaussian_elimination(Matrix *m)
+Matrix *gaussian_elimination(Matrix *original)
 {
-    Vector *v = vector_new(3);
-    vector_set(v, 0, 1);
-    vector_set(v, 1, 5);
-    vector_set(v, 2, 2);
-    return v;
+    Matrix *m, *result;
+    m = matrix_copy(original);
+    uint64_t i, j, k, pivot;
+    double fbuf;
+    double factor;
+
+    for (i = 0; i < m->nrows - 1; ++i) {
+        // find the row with the highest absolute value in col i
+        pivot = i;
+
+        for (j = i + 1; j < m->nrows; ++j) {
+            if (fabs(matrix_get(m, j, i)) > fabs(matrix_get(m, pivot, i))) {
+                pivot = j;
+            }
+        }
+
+        // swap it with the ith row
+        if (pivot != i) {
+            for (j = 0; j < m->ncols; ++j) {
+                fbuf = matrix_get(m, i, j);
+                matrix_set(m, i, j, matrix_get(m, pivot, j));
+                matrix_set(m, pivot, j, fbuf);
+            }
+        }
+
+        // eliminate column i under ith row
+        for (j = i + 1; j < m->nrows; ++j) {
+            factor = matrix_get(m, j, i) / matrix_get(m, i, i);
+
+            for (k = 0; k < m->ncols; ++k) {
+                fbuf = matrix_get(m, j, k) - matrix_get(m, i, k) * factor;
+                matrix_set(m, j, k, fbuf);
+            }
+        }
+    }
+
+    result = matrix_new(m->nrows, 1);
+    matrix_print(result);
+
+    for (i = m->nrows; i > 0; --i) {
+        fbuf = matrix_get(m, i - 1, m->ncols - 1);
+
+        for (j = i; j < m->ncols - 1; ++j) {
+            fbuf -= matrix_get(m, i - 1, j) * matrix_get(result, j, 0);
+        }
+
+        matrix_set(result, i - 1, 0, fbuf / matrix_get(m, i - 1, i - 1));
+        printf("\t");
+        matrix_print(result);
+    }
+
+    return result;
 }

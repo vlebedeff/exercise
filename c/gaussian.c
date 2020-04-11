@@ -9,6 +9,7 @@
 typedef struct {
     uint64_t nrows;
     uint64_t ncols;
+    uint64_t nitems;
     double *data;
 } Matrix;
 
@@ -31,10 +32,12 @@ int main(int argc, char *argv[])
 
 void do_test()
 {
+    void test_matrix_new_1();
     void test_matrix_init_1();
     void test_matrix_copy_1();
     void test_gaussian_elimination_1();
     void test_gaussian_elimination_2();
+    test_matrix_new_1();
     test_matrix_init_1();
     test_matrix_copy_1();
     /* test_gaussian_elimination_1(); */
@@ -74,6 +77,14 @@ void test_gaussian_elimination_2()
     matrix_destroy(expected);
     matrix_destroy(actual);
     matrix_destroy(in);
+}
+
+void test_matrix_new_1()
+{
+    Matrix *m = matrix_new(10, 42);
+    assert(m->nrows == 10);
+    assert(m->ncols == 42);
+    assert(m->nitems == 420);
 }
 
 void test_matrix_init_1()
@@ -116,6 +127,7 @@ Matrix *matrix_new(uint64_t nrows, uint64_t ncols)
     m = malloc(sizeof(*m));
     m->nrows = nrows;
     m->ncols = ncols;
+    m->nitems = nrows * ncols;
     m->data = calloc(sizeof(*(m->data)), nrows * ncols);
     return m;
 }
@@ -123,11 +135,10 @@ Matrix *matrix_new(uint64_t nrows, uint64_t ncols)
 Matrix *matrix_init(Matrix *m, ...)
 {
     va_list args;
-    uint64_t i, nitems;
-    nitems = m->nrows * m->ncols;
+    uint64_t i;
     va_start(args, m);
 
-    for (i = 0; i < nitems; i++) {
+    for (i = 0; i < m->nitems; i++) {
         *(m->data + i) = va_arg(args, double);
     }
 
@@ -178,10 +189,9 @@ bool matrix_eq(Matrix *m1, Matrix *m2)
 Matrix *matrix_copy(Matrix *m)
 {
     Matrix *mcopy = matrix_new(m->nrows, m->ncols);
-    uint64_t i, nitems;
-    nitems = mcopy->nrows * mcopy->ncols;
+    uint64_t i;
 
-    for (i = 0; i < nitems; i++) {
+    for (i = 0; i < m->nitems; i++) {
         *(mcopy->data + i) = *(m->data + i);
     }
 

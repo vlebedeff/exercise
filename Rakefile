@@ -4,7 +4,7 @@ require 'rubocop/rake_task'
 RSpec::Core::RakeTask.new
 RuboCop::RakeTask.new
 
-task default: %i[spec rubocop]
+task default: :test
 
 task :console do
   require 'pry'
@@ -16,11 +16,11 @@ task :console do
 end
 
 file 'dist/gaussian' => 'c/gaussian.c' do
-  sh 'gcc --std=c11 -pipe -Wall -lm c/gaussian.c -o dist/gaussian'
+  sh 'gcc --std=c11 -pipe -Wall -pedantic -lm -g c/gaussian.c -o dist/gaussian'
 end
 
 task test: [:spec, :rubocop, 'dist/gaussian'] do
-  sh('./dist/gaussian') && puts('OK')
+  sh('echo "0" | ./dist/gaussian')
 end
 
 task format: :astyle do
@@ -30,5 +30,5 @@ task format: :astyle do
 end
 
 task :astyle do
-  sh("command -v astyle > /dev/null || sudo apt install -y astyle")
+  sh('command -v astyle > /dev/null || sudo apt install -y astyle')
 end

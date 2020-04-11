@@ -27,3 +27,16 @@ module Exercise
     s.map { |x| x.round(12) }
   end
 end
+
+if $PROGRAM_NAME == __FILE__
+  include Exercise # rubocop:disable Style/MixinUsage
+  nrows = gets.strip.to_i
+  matrix = Array.new(nrows)
+  nrows.times do |i|
+    matrix[i] = gets.strip.split(' ').map(&:to_f)
+  end
+  result = gaussian_elimination(matrix)
+  result.each do |x|
+    print(format('%.6f ', x))
+  end
+end

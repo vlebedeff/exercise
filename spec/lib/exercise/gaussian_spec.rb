@@ -1,4 +1,5 @@
 require 'benchmark'
+require 'rake'
 
 RSpec.describe Exercise, '#gaussian' do
   example do
@@ -71,5 +72,42 @@ RSpec.describe Exercise, '#gaussian' do
          [-2000, -1000, 1000, 1000, -9000],
          [-100_000, -200_000, 100_000, 200_000, -300_000]]
     expect(Benchmark.realtime { 1000.times { gaussian_elimination(a) } }).to be < 0.05
+  end
+
+  describe 'c' do
+    before(:all) do
+      Rake.load_rakefile('Rakefile')
+      Rake::FileTask['dist/gaussian'].invoke
+    end
+
+    example do
+      expect { system('dist/gaussian < spec/fixtures/gaussian/0.txt') }.not_to(
+        output.to_stdout_from_any_process
+      )
+    end
+
+    example do
+      expect { system('dist/gaussian < spec/fixtures/gaussian/1.txt') }.to(
+        output(format("%12.6f%12.6f%12.6f\n", 1, 5, 2)).to_stdout_from_any_process
+      )
+    end
+
+    example do
+      expect { system('dist/gaussian < spec/fixtures/gaussian/2.txt') }.to(
+        output(format("%12.6f%12.6f%12.6f\n", 2, 3, -1)).to_stdout_from_any_process
+      )
+    end
+
+    example do
+      expect { system('dist/gaussian < spec/fixtures/gaussian/3.txt') }.to(
+        output(format("%12.6f%12.6f%12.6f%12.6f\n", 3, -2, 0, 5)).to_stdout_from_any_process
+      )
+    end
+
+    example do
+      expect { system('dist/gaussian < spec/fixtures/gaussian/4.txt') }.to(
+        output(format("%12.6f%12.6f\n", 0.2, 0.4)).to_stdout_from_any_process
+      )
+    end
   end
 end

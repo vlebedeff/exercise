@@ -6,7 +6,6 @@
 #include <math.h>
 #include <stdarg.h>
 #include <float.h>
-#include <string.h>
 
 typedef struct {
     uint64_t nrows;
@@ -66,76 +65,17 @@ void do_run()
 
 void do_test()
 {
-    void test_matrix_new_1();
-    void test_matrix_init_1();
-    void test_matrix_copy_1();
+    void test_matrix_new();
+    void test_matrix_init();
+    void test_matrix_copy();
     void test_matrix_get();
-    void test_gaussian_elimination();
-    test_matrix_new_1();
-    test_matrix_init_1();
-    test_matrix_copy_1();
+    test_matrix_new();
+    test_matrix_init();
+    test_matrix_copy();
     test_matrix_get();
-    test_gaussian_elimination();
 }
 
-void test_gaussian_elimination()
-{
-    // Example 1
-    Matrix *m, *actual, *expected;
-    m = matrix_new(3, 4);
-    matrix_init(
-        m,
-        1.0, 3.0, -4.0, 8.0,
-        1.0, 1.0, -2.0, 2.0,
-        -1.0, -2.0, 5.0, -1.0
-    );
-    expected = matrix_new(3, 1);
-    matrix_init(expected, 1.0, 5.0, 2.0);
-    actual = gaussian_elimination(m);
-    assert(matrix_eq(actual, expected));
-    matrix_ndestroy(3, m, expected, actual);
-    // Example 2
-    m = matrix_new(3, 4);
-    expected = matrix_new(3, 1);
-    matrix_init(
-        m,
-        2.0, 1.0, -1.0, 8.0,
-        -3.0, -1.0, 2.0, -11.0,
-        -2.0, 1.0, 2.0, -3.0
-    );
-    matrix_init(expected, 2.0, 3.0, -1.0);
-    actual = gaussian_elimination(m);
-    assert(matrix_eq(actual, expected) == true);
-    matrix_ndestroy(3, m, expected, actual);
-    // Example 3
-    m = matrix_new(4, 5);
-    matrix_init(
-        m,
-        1.0, 2.0, 5.0, 1.0, 4.0,
-        3.0, -4.0, 3.0, -2.0, 7.0,
-        4.0, 3.0, 2.0, -1.0, 1.0,
-        1.0, -2.0, -4.0, -1.0, 2.0
-    );
-    expected = matrix_new(4, 1);
-    matrix_init(expected, 3.0, -2.0, 0.0, 5.0);
-    actual = gaussian_elimination(m);
-    assert(matrix_eq(actual, expected));
-    matrix_ndestroy(3, m, expected, actual);
-    // Example 4
-    m = matrix_new(2, 3);
-    matrix_init(
-        m,
-        5.0, -5.0, -1.0,
-        -1.0, -2.0, -1.0
-    );
-    expected = matrix_new(2, 1);
-    matrix_init(expected, 0.2, 0.4);
-    actual = gaussian_elimination(m);
-    assert(matrix_eq(actual, expected));
-    matrix_ndestroy(3, m, expected, actual);
-}
-
-void test_matrix_new_1()
+void test_matrix_new()
 {
     Matrix *m = matrix_new(10, 42);
     assert(m->nrows == 10);
@@ -143,7 +83,7 @@ void test_matrix_new_1()
     assert(m->nitems == 420);
 }
 
-void test_matrix_init_1()
+void test_matrix_init()
 {
     Matrix *m = matrix_new(2, 3);
     matrix_init(
@@ -160,7 +100,7 @@ void test_matrix_init_1()
     matrix_destroy(m);
 }
 
-void test_matrix_copy_1()
+void test_matrix_copy()
 {
     Matrix *m1, *m2;
     m1 = matrix_new(2, 3);
@@ -322,10 +262,9 @@ void matrix_ndestroy(unsigned short n, ...)
 Matrix *gaussian_elimination(Matrix *original)
 {
     Matrix *m, *result;
-    m = matrix_copy(original);
     uint64_t i, j, k, pivot;
-    double fbuf;
-    double factor;
+    double fbuf, factor;
+    m = matrix_copy(original);
 
     for (i = 0; i < (m->nrows - 1); ++i) {
         // find the row with the highest absolute value in col i

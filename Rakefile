@@ -1,10 +1,13 @@
+require 'rake/clean'
 require 'rspec/core/rake_task'
 require 'rubocop/rake_task'
+
+CLOBBER.include('dist/*')
 
 RSpec::Core::RakeTask.new
 RuboCop::RakeTask.new
 
-task default: :test
+task default: %w[spec rubocop]
 
 task :console do
   require 'pry'
@@ -16,11 +19,7 @@ task :console do
 end
 
 file 'dist/gaussian' => 'c/gaussian.c' do
-  sh 'gcc --std=c11 -pipe -Wall -pedantic -lm -g c/gaussian.c -o dist/gaussian'
-end
-
-task test: [:spec, :rubocop, 'dist/gaussian'] do
-  sh('echo "0" | ./dist/gaussian')
+  sh 'gcc --std=c11 -pipe -Wall -pedantic -lm -g c/gaussian.c -o dist/gaussian', verbose: false
 end
 
 task format: :astyle do

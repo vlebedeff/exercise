@@ -1,3 +1,5 @@
+require 'rake'
+
 RSpec.describe Exercise do
   include Exercise
 

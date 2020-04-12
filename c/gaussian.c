@@ -19,7 +19,7 @@ Matrix *matrix_init(Matrix *, ...);
 double  matrix_get(const Matrix *, uint64_t, uint64_t);
 void    matrix_set(const Matrix *m, uint64_t row, uint64_t col, double value);
 bool    matrix_eq(Matrix *, Matrix *);
-void    matrix_print(Matrix *, char *);
+void    matrix_print(Matrix *);
 Matrix *matrix_copy(Matrix *);
 void    matrix_destroy(Matrix *m);
 void    matrix_ndestroy(unsigned short, ...);
@@ -54,12 +54,7 @@ void do_run()
     }
 
     result = gaussian_elimination(m);
-
-    for (offset = 0; offset < result->nitems; ++offset) {
-        printf("%12.6f", *(result->data + offset));
-    }
-
-    printf("\n");
+    matrix_print(result);
     matrix_ndestroy(2, m, result);
 }
 
@@ -227,16 +222,13 @@ void matrix_set(const Matrix *m, uint64_t row, uint64_t col, double value)
     }
 }
 
-void matrix_print(Matrix *m, char *name)
+void matrix_print(Matrix *m)
 {
     uint64_t i;
-    printf("%s\n", name);
 
     for (i = 0; i < m->nitems; i++) {
-        printf((i + 1) % m->ncols == 0 ? "%10.4f\n" : "%10.4f", *(m->data + i));
+        printf((i + 1) % m->ncols == 0 ? "%12.6f\n" : "%12.6f", *(m->data + i));
     }
-
-    printf("\n");
 }
 
 void matrix_destroy(Matrix *m)
@@ -296,16 +288,16 @@ Matrix *gaussian_elimination(Matrix *original)
         }
     }
 
-    result = matrix_new(m->nrows, 1);
+    result = matrix_new(1, m->nrows);
 
     for (i = m->nrows; i > 0; --i) {
         fbuf = matrix_get(m, i - 1, m->ncols - 1);
 
         for (j = i; j < m->ncols - 1; ++j) {
-            fbuf -= matrix_get(m, i - 1, j) * matrix_get(result, j, 0);
+            fbuf -= matrix_get(m, i - 1, j) * matrix_get(result, 0, j);
         }
 
-        matrix_set(result, i - 1, 0, fbuf / matrix_get(m, i - 1, i - 1));
+        matrix_set(result, 0, i - 1, fbuf / matrix_get(m, i - 1, i - 1));
     }
 
     return result;

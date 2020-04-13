@@ -80,37 +80,50 @@ void test_matrix_new()
 
 void test_matrix_init()
 {
-    Matrix *m = matrix_new(2, 3);
-    matrix_init(
-        m,
-        1.0, 2.0, 3.0,
-        7.0, 6.0, 5.0
-    );
-    assert(*(m->data) == 1);
-    assert(*(m->data + 1) == 2.0);
-    assert(*(m->data + 2) == 3.0);
-    assert(*(m->data + 3) == 7.0);
-    assert(*(m->data + 4) == 6.0);
-    assert(*(m->data + 5) == 5.0);
+    Matrix *m;
+    {
+        m = matrix_new(2, 3);
+    }
+    {
+        matrix_init(
+            m,
+            1.0, 2.0, 3.0,
+            7.0, 6.0, 5.0
+        );
+    }
+    {
+        assert(*(m->data) == 1);
+        assert(*(m->data + 1) == 2.0);
+        assert(*(m->data + 2) == 3.0);
+        assert(*(m->data + 3) == 7.0);
+        assert(*(m->data + 4) == 6.0);
+        assert(*(m->data + 5) == 5.0);
+    }
     matrix_destroy(m);
 }
 
 void test_matrix_copy()
 {
     Matrix *m1, *m2;
-    m1 = matrix_new(2, 3);
-    matrix_init(
-        m1,
-        1.0, 2.0, 3.0,
-        7.0, 6.0, 5.0
-    );
-    m2 = matrix_copy(m1);
-    assert(*(m2->data) == 1.0);
-    assert(*(m2->data + 1) == 2.0);
-    assert(*(m2->data + 2) == 3.0);
-    assert(*(m2->data + 3) == 7.0);
-    assert(*(m2->data + 4) == 6.0);
-    assert(*(m2->data + 5) == 5.0);
+    {
+        m1 = matrix_new(2, 3);
+        matrix_init(
+            m1,
+            1.0, 2.0, 3.0,
+            7.0, 6.0, 5.0
+        );
+    }
+    {
+        m2 = matrix_copy(m1);
+    }
+    {
+        assert(*(m2->data) == 1.0);
+        assert(*(m2->data + 1) == 2.0);
+        assert(*(m2->data + 2) == 3.0);
+        assert(*(m2->data + 3) == 7.0);
+        assert(*(m2->data + 4) == 6.0);
+        assert(*(m2->data + 5) == 5.0);
+    }
     matrix_ndestroy(2, m1, m2);
 }
 

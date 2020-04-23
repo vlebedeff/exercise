@@ -24,6 +24,13 @@ rect_t rect_move(rect_t r, int offsetx, int offsety) {
     return r;
 }
 
+typedef struct person {
+    char *first_name;  // 4
+    char *last_name;   // 4
+    char *title;       // 4
+    short age;         // 4
+}
+
 int main(int argc, char *argv[])
 {
     point_t p1, p2;

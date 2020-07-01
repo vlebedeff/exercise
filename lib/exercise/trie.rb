@@ -1,5 +1,7 @@
 module Exercise
   class Trie
+    Edge = Struct.new(:destination, :label)
+
     def initialize(patterns)
       adjacency = {}
       node_count = 0
@@ -7,12 +9,12 @@ module Exercise
         parent = 0
         pattern.each_char do |char|
           adjacency[parent] ||= []
-          existing_edge = adjacency[parent].find { |_dest, label| char == label }
+          existing_edge = adjacency[parent].find { |edge| edge.label == char }
           if existing_edge
-            parent = existing_edge[0]
+            parent = existing_edge.destination
           else
             node_count += 1
-            adjacency[parent] << [node_count, char]
+            adjacency[parent] << Edge.new(node_count, char)
             parent = node_count
           end
         end
@@ -22,7 +24,7 @@ module Exercise
 
     def to_s
       @adjacency
-        .flat_map { |src, edges| edges.map { |dest, label| "#{src}->#{dest}:#{label}" } }
+        .flat_map { |src, edges| edges.map { |e| "#{src}->#{e.destination}:#{e.label}" } }
         .join("\n")
     end
   end

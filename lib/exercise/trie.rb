@@ -7,9 +7,14 @@ module Exercise
         parent = 0
         pattern.each_char do |char|
           adjacency[parent] ||= []
-          node_count += 1
-          adjacency[parent] << [node_count, char]
-          parent = node_count
+          existing_edge = adjacency[parent].find { |_dest, label| char == label }
+          if existing_edge
+            parent = existing_edge[0]
+          else
+            node_count += 1
+            adjacency[parent] << [node_count, char]
+            parent = node_count
+          end
         end
       end
       @adjacency = adjacency

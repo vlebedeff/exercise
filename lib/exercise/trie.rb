@@ -29,3 +29,13 @@ module Exercise
     end
   end
 end
+
+if $PROGRAM_NAME == __FILE__
+  npatterns = gets.strip.to_i
+  patterns = []
+  npatterns.times do
+    patterns << gets.strip
+  end
+  trie = Exercise::Trie.new(patterns)
+  puts trie.to_s
+end

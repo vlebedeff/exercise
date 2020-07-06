@@ -62,5 +62,21 @@ module Exercise
         )
       end
     end
+
+    describe '#match' do
+      example do
+        expect(described_class.new(%w[AA]).match('AAA')).to eq([0, 1])
+      end
+
+      example do
+        expect(described_class.new(%w[AA]).match('G')).to eq([])
+      end
+
+      example do
+        expect(described_class.new(%w[ATCG GGGT]).match('AATCGGGTTCAATCGGGGT')).to eq(
+          [1, 4, 11, 15]
+        )
+      end
+    end
   end
 end

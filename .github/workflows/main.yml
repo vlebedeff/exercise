@@ -29,4 +29,5 @@ jobs:
       run: |
         git --version
         git remote -v
+        git fetch origin master
         git merge-base --is-ancestor origin/master HEAD

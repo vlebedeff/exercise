@@ -30,4 +30,5 @@ jobs:
         git --version
         git remote -v
         git fetch origin master
+        git show HEAD
         git merge-base --is-ancestor origin/master HEAD

@@ -30,6 +30,7 @@ jobs:
         git --version
         git remote -v
         git fetch origin master
+        echo $SHELL
         git show-ref "$(echo $GITHUB_REF)"
         printenv
         git merge-base --is-ancestor origin/master $GITHUB_SHA

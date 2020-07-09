@@ -1,20 +1,24 @@
 module Exercise
   class Trie
-    Edge = Struct.new(:destination, :label)
+    Edge = Struct.new(:destination, :label, :eow)
 
     def initialize(patterns)
       adjacency = {}
       node_count = 0
       patterns.each do |pattern|
         parent = 0
-        pattern.each_char do |char|
+        last_index = pattern.size - 1
+        0.upto(last_index) do |i|
+          char = pattern[i]
+          eow = i == last_index
           adjacency[parent] ||= []
           existing_edge = adjacency[parent].find { |edge| edge.label == char }
           if existing_edge
             parent = existing_edge.destination
+            existing_edge.eow = true if eow
           else
             node_count += 1
-            adjacency[parent] << Edge.new(node_count, char)
+            adjacency[parent] << Edge.new(node_count, char, eow)
             parent = node_count
           end
         end
@@ -32,12 +36,16 @@ module Exercise
       match_positions = []
       text.size.times do |start|
         node = 0
+        edge = nil
         start.upto(text.size - 1) do |offset|
           edge = @adjacency[node] && @adjacency[node].find { |e| e.label == text[offset] }
           break unless edge
+          if edge.eow
+            match_positions << start
+            break
+          end
           node = edge.destination
         end
-        match_positions << start if @adjacency[node].nil?
       end
       match_positions
     end

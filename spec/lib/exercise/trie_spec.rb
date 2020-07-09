@@ -77,6 +77,10 @@ module Exercise
           [1, 4, 11, 15]
         )
       end
+
+      it 'finds overlapping patterns in text' do
+        expect(described_class.new(%w[AT A AG]).match('ACATA')).to eq([0, 2, 4])
+      end
     end
   end
 end

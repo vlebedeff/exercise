@@ -1,0 +1,79 @@
+<html>
+  <head>
+    <style>
+      .container-1, .container-2 {
+        width: 1200px;
+        margin: 40 auto;
+        display: flex;
+        align-items: flex-end;
+      }
+      .container-1 div, .container-2 div {
+        border: 1px #ccc solid;
+        padding: 10px;
+      }
+      .box-1 {
+        flex: 2;
+        order: 2;
+      }
+      .box-2 {
+        flex: 1;
+        order: 1;
+      }
+      .box-3 {
+        flex: 1;
+        order: 3;
+      }
+
+      .container-2 {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .container-2 div {
+        /*
+        width: 28%;
+        */
+        flex-basis: 28%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-1">
+      <div class="box-1">
+        <h3>Box One</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</p>
+      </div>
+      <div class="box-2">
+        <h3>Box Two</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</p>
+      </div>
+      <div class="box-3">
+        <h3>Box Three</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</p>
+      </div>
+    </div>
+    <div class="container-2">
+      <div class="box-4">
+        <h3>Box Four</h3>
+        <p>
+          Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem
+          aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+        </p>
+      </div>
+      <div class="box-5">
+        <h3>Box Five</h3>
+        <p>
+          Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem
+          aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+        </p>
+      </div>
+      <div class="box-6">
+        <h3>Box Six</h3>
+        <p>
+          Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem
+          aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
